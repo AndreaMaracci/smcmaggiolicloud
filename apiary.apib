@@ -1,0 +1,73 @@
+FORMAT: 1A
+
+# SMC MaggioliCloud
+
+API di interfaccia per il calcolo dei tempi di risposta del server SMC.
+
+# Ping Test [/smc/ping]
+
+## Ping [GET]
+Richiedeun messaggio di risposta standard per la verifica della connessione
++ Response 200 (text/plain)
+
+    + Body
+
+            pong
+            
+
+## AskMessage [POST]
+
+    Richiede un messaggio di risposta da una destinazione specificata nell'header Maggioli-SMC-Destination
+
++ Request (application/json)
+
+    + Headers
+      
+            Maggioli-SMC-Destination:jdemosuape,
+            Maggioli-SMC-Sender:jdemosuape,
+            Maggioli-SMC-Message-Class:smc.text.echo,
+            Date:ddd, DD MMM YYYY HH:MM:SS GMT
+        
+    + Body
+      
+            {
+                "message":"echo!"
+            }
+      
+    + Schema
+      
+            {
+                "$schema": "http://json-schema.org/schema#" 
+                "type":"object",
+                "properties":{"message":{"type":"string"}}
+            }
+            
+            
++ Response 404 (text/plain)
+    
+    Questa risposta arriva quando il contenuto dell'header Maggioli-SMC-Destination non viene riconosciuto come destinazione valida
+
+    + Header
+    
+            MULE_ENCODING:UTF-8,
+            Connection:close,
+            Date:ddd, DD MMM YYYY HH:MM:SS GMT
+            
+    + Body
+            
+            Failed to invoke findOneObjectUsingQueryMap.
+            
+            
++ Response 401 (text/plain)
+
+    Questa risposta arriva quando non si hanno i permessi per accedere alla destinazione
+
+    + Header
+    
+            MULE_ENCODING:UTF-8,
+            Connection:close,
+            Date:ddd, DD MMM YYYY HH:MM:SS GMT
+            
+    + Body
+            
+                Accesso Negato.
